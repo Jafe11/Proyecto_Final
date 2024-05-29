@@ -6,6 +6,8 @@ import javax.swing.JOptionPane;
 
 public class app {
     static LinkedList<cls_pacientes> pacientes = new LinkedList<>(); //Creacion de la lista de pacientes
+    static LinkedList<cls_citas> citas = new LinkedList<>(); //Creacion de la lista citas
+
     public static void main(String[] args) {
         fnt_menu(true);
     }
@@ -25,7 +27,7 @@ public class app {
                 boolean sw =false;
                 String id = JOptionPane.showInputDialog(null, "Ingrese el id del paciente: ");
                 for (int i =0; i<pacientes.size();i++){
-                    if (pacientes.get(i).getNombreStr().equals(id)){
+                    if (pacientes.get(i).getIdStr().equals(id)){
                         sw = true;
                         break;
                     }
@@ -63,6 +65,57 @@ public class app {
                     JOptionPane.showMessageDialog(null, "Paciente no se encuentra registrado");
                 }
             }
+            if (opcionesPacientes.equals("3")){
+                menuPacientes = false;
+            }
+        }
+    }
+
+    public static void  fnt_citas (){
+        boolean sw = false;
+
+        String id = JOptionPane.showInputDialog(null, "ID: ");
+        for (int i =0; i<citas.size();i++){
+            if (citas.get(i).getIdStr().equals(id)){
+                sw = true;
+                break;
+            }
+        }
+        if (sw == true){
+            JOptionPane.showMessageDialog(null, "La cita ya existe");
+        }else{
+            String fecha = JOptionPane.showInputDialog(null, "Fecha: ");
+            String Hora = JOptionPane.showInputDialog(null, "Hora: ");
+            String Detalle = JOptionPane.showInputDialog(null, "Detalles de la cita: ");
+            citas.add(new cls_citas(id, fecha, Hora, Detalle));
+        }
+    }
+
+    public static void fnt_reporte (String idConsultar){
+        boolean sw =false;
+        int pos = 0;
+        for (int i =0; i<pacientes.size();i++){
+            if (pacientes.get(i).getIdStr().equals(idConsultar)){
+                sw = true;
+                pos = i;
+                break;
+            }
+        }
+        if (sw == true){
+            String paciente = "Nombre paciente: " + pacientes.get(pos).getNombreStr() + "Contacto: " + pacientes.get(pos).getContactoStr() + "\n";
+            sw = false;
+            for (int i =0; i<citas.size();i++){
+                if(citas.get(i).getIdStr().equals(idConsultar)){
+                     JOptionPane.showMessageDialog(null, "FECHA: " + citas.get(i).getFechaStr() +
+                     "\nHora: " + citas.get(i).getHoraStr() +
+                     "\nDetalles de la cita: " + citas.get(i).getDetInformacion());
+                }
+                if (sw == false){
+                 JOptionPane.showMessageDialog(null, "Este paciente no tien citasregistradas");
+                }
+             }
+        }else{
+            JOptionPane.showMessageDialog(null, "El paciente no existe");
         }
     }
 
@@ -76,6 +129,12 @@ public class app {
 
             if (opcionesStr.equals("1")){
                 fnt_pacientes(true);
+            }
+            if (opcionesStr.equals("2")){
+                fnt_citas();
+            }
+            if (opcionesStr.equals("3")){
+                fnt_reporte(JOptionPane.showInputDialog(null, "ID: "));
             }
         }
     }
